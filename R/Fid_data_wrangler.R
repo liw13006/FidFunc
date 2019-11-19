@@ -18,7 +18,10 @@ dailynlogReturn <- function(Date1,DataFrame){
 }
 
 #' This function calculate projection value:
-#' @param DF with @param Date and @param Closed price and returns a @return projection value of the fund from the start date and assuming 10k investment from the start and reinvest all earnings
+#' @param DF with
+#' @param Date and
+#' @param Closed price and returns a
+#' @return projection value of the fund from the start date and assuming 10k investment from the start and reinvest all earnings
 #' @export
 getProjectionValue <- function(DF){
   P0 = dplyr::pull(dplyr::filter(DF, Date == dplyr::pull(dplyr::top_n(DF["Date"],-1)))%>%dplyr::select(Close))

@@ -7,7 +7,14 @@
 getProjectionValue(DF)
 }
 \arguments{
-\item{DF}{with @param Date and @param Closed price and returns a @return projection value of the fund from the start date and assuming 10k investment from the start and reinvest all earnings}
+\item{DF}{with}
+
+\item{Date}{and}
+
+\item{Closed}{price and returns a}
+}
+\value{
+projection value of the fund from the start date and assuming 10k investment from the start and reinvest all earnings
 }
 \description{
 This function calculate projection value:
