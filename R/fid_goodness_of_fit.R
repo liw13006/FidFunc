@@ -29,7 +29,7 @@ plotmodel <- function(md,modelequation = md$call,linecolor = "#CE8891"){
     ylab("Standardized Residuals")+
     ggtitle(label = "QQ plot for residuals")
 
-  return(list(redisualplot = p1,
+  return(list(residualplot = p1,
               qqplot = p2))
 }
 
