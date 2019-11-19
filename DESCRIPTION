@@ -4,8 +4,14 @@ Title: Useful functions for Fidelity MSSP project
 Version: 0.1.0
 Author: Weiling Li
 Maintainer: Weiling Li <liw13006@bu.edu>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: Creative Commons licence
+Description: Provide friendly functions for calculating log return and log closed NAV.    Also provide simple test for lm model with one predictor and no intercept
+License: GPL-3
 Encoding: UTF-8
 LazyData: true
+Imports:
+  ggplot2,
+  arm,
+  coin,
+  dplyr,
+  tidyr
+RoxygenNote: 7.0.0

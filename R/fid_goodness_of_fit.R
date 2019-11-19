@@ -1,15 +1,16 @@
 
 
-pacman::p_load(arm,coin,tidyverse)
+
 
 # ---------------------------------------------------------------------------
-## this function takes:
-## md:              a lm model,
-## modelequation:   a string that describe the model(if not specified, will be the $call of the lm model)
-## linecolor:       specify a color for the line occurs in the plot
-## The two plots are in list, and it is a ggplot so
-## one can modify the plot by adding theme to the output plots
-
+#' plot model
+#' @param md:              a lm model,
+#' @param modelequation:   a string that describe the model(if not specified, will be the $call of the lm model)
+#' @param linecolor:       specify a color for the line occurs in the plot
+#' The two plots are in list, and it is a ggplot so
+#' one can modify the plot by adding theme to the output plots
+#' @return Standardized residual plot and residual QQ plot
+#' @export
 plotmodel <- function(md,modelequation = md$call,linecolor = "#CE8891"){
   p1 <- ggplot(md)+
     aes(x = .fitted,y = .stdresid)+
@@ -34,32 +35,47 @@ plotmodel <- function(md,modelequation = md$call,linecolor = "#CE8891"){
 
 # ---------------------------------------------------------------------------
 
-## generate SD for each observed datapoint
+#' generate SD for each observed datapoint
+#'
+#'  the original sd estimation for a specific observation x should be
+#'  sqrt(1+x `%*%` vcov(model) `%*%` x.T)  `*`   sigma_y
+#'  However, this only allows for point wise multiplication. For our purpose,
+#'  because we need to calculate for all the adjusted standard error for each predicted y
+#'  the left X is transform into a diagnal matrix with ith entry is X_i,
+#'  the vcov(model) is also transformed into a diagnal matrix such that ensure each X_i will
+#'  independently times a single vcov(model).
+#'  The right is just the feature matrix X with each row is one observation
+#' @param md a lm model with 1 predictor and no intercept
+#' @return adjusted standard error for each X in the original model
+#' @export
 md_std <- function(md){
   X_ <- md$model[,2]
   left <- diag(x = X_ )
   mid <- as.numeric(vcov(md))*diag(x = 1,nrow = length(X_))
   sig <- summary(md)$sigma
-  ## the original sd estimation for a specific observation x should be
-  ## sqrt(1+x %*% vcov(model) %*% x.T)  *   sigma_y
-  ## However, this only allows for point wise multiplication. For our purpose,
-  ## because we need to calculate for all the adjusted standard error for each predicted y
-  ## the left X is transform into a diagnal matrix with ith entry is X_i,
-  ## the vcov(model) is also transformed into a diagnal matrix such that ensure each X_i will
-  ## independently times a single vcov(model).
-  ## The right is just the feature matrix X with each row is one observation
   return(sqrt(1+left %*% mid %*% X_)*sig)
 }
 
 
-## using predicted y value as mean and calculated sd as sd simulate y
+#' Simulate y
+#'
+#' using predicted y value as mean and calculated sd as sd simulate y
+#' @param md lm model
+#' @return simulated y_sim
+
 md_y_sim <- function(md){
   y_pred <- predict(md)
   y_sd <- md_std(md)
   return(rnorm(n = length(y_pred),mean = y_pred,sd = y_sd))
 }
 
-## Use the above function to simulate y_sim and compare to the original y_obs
+#' simulate and test bundle
+#'
+#' Use the above function to simulate y_sim and compare to the original y_obs
+#' @param md lm model
+#' @param method correlation test's method, pearson, spearman, etc.
+#' @return between y_obs and y_sim: ks.test, permutation test, t.test, correlation test, variance F-test and histogram.
+#' @export
 md_test <- function(md,method = "pearson",modelequation = md$call){
   ## Right now only work for a lm model with only 1 predictor, but with modification
   ## it is easy to have it work for multiple predictors.
@@ -98,16 +114,19 @@ md_test <- function(md,method = "pearson",modelequation = md$call){
 ## functions below are taking individual tests separately such that one can choose what
 ## is interested
 
-## test y_sim and actual y using ks test,low p-value will reject the hypo-
-## thesis that they are from the same distribution
+#' test y_sim and actual y using ks test,low p-value will reject the hypo-thesis that they are from the same distribution
+#' @param md lm model
+#' @return ks test between y_obs and y_sim
+
 md_ks_test <- function(md){
   y_obs <- md$model[,1]
   y_sim <- md_y_sim(md)
   return(ks.test(y_obs,y_sim))
 }
 
-## test y_sim and actual y using permutation test, low p-value will rej-
-## ect the hypothesis that they are independent
+#' test y_sim and actual y using permutation test, low p-value will reject the hypothesis that they are independent
+#' @param md lm model
+#' @return permutation results
 
 md_perm_test <- function(md){
   y_obs <- md$model[,1]
@@ -115,14 +134,21 @@ md_perm_test <- function(md){
   return(coin::independence_test(y_obs ~ y_sim))
 }
 
-## test y_sim and actual y using t-statistics
+#' test y_sim and actual y using t-statistics, low p-value reject the hypothesis that they have same mean.
+#' @param md lm model
+#' @return t test result
 
 md_t_test <- function(md){
   y_obs <- md$model[,1]
   y_sim <- md_y_sim(md)
   return(t.test(y_obs,y_sim))
 }
-## plot the observed data and simulated data as histogram on the same graph
+
+#' plot the observed data and simulated data as histogram on the same graph
+#' @param md lm model
+#' @param modelequation model description for plotting purpose
+#' @return a histogram of y_obs and y_sim
+
 plot_md_hist <- function(md,modelequation = md$call){
   y_obs <- md$model[,1]
   y_sim <- md_y_sim(md)
@@ -134,15 +160,19 @@ plot_md_hist <- function(md,modelequation = md$call){
   return(p1)
 }
 
-## correlation test, pearson or spearman
+#' correlation test, pearson or spearman
+#' @param md lm model
+#' @param method correlation test method, pearson or spearman
+
 md_corr_test <- function(md,method = "pearson"){
   y_obs <- md$model[,1]
   y_sim <- md_y_sim(md)
   return(cor(y_obs,y_sim,use = "everything",method = method))
 }
 
-## F-test for two sample sd
-
+#' F-test for two sample standard errors
+#' @param md lm model
+#' @return variance F test
 md_f_test <- function(md){
   y_obs <- md$model[,1]
   y_sim <- md_y_sim(md)
