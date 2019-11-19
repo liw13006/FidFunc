@@ -8,9 +8,10 @@
 #' @export
 dailynlogReturn <- function(Date1,DataFrame){
   DataFrame = dplyr::mutate(DataFrame,
-                     dailyReturn = (Close-dplyr::lag(Close))/Close,
-                     log.Close = log(Close),
-                     log.Return = log.Close-dplyr::lag(log.Close))%>%
+                            Date = as.Date.factor(Date),
+                            dailyReturn = (Close-dplyr::lag(Close))/Close,
+                            log.Close = log(Close),
+                            log.Return = log.Close-dplyr::lag(log.Close))%>%
     dplyr::mutate(perc_dailyRe = round(dailyReturn*100.0,3))%>%
     dplyr::filter(Date >= Date1)%>%
     dplyr::filter(Date <= as.Date("2018-12-31"))
