@@ -1,0 +1,11 @@
+Package: FidFunc
+Type: Package
+Title: Useful functions for Fidelity MSSP project
+Version: 0.1.0
+Author: Weiling Li
+Maintainer: Weiling Li <liw13006@bu.edu>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: Creative Commons licence
+Encoding: UTF-8
+LazyData: true
