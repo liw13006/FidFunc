@@ -2,7 +2,7 @@
 % Please edit documentation in R/Fid_data_wrangler.R
 \name{dailynlogReturn}
 \alias{dailynlogReturn}
-\title{this function requires}
+\title{Calculate Daily Return, Log close price and log return}
 \usage{
 dailynlogReturn(Date1, DataFrame)
 }
@@ -14,5 +14,5 @@ and a date column named: @param Date with format as: floating point and "xxxx(ye
 the dailyreturn, log closed price and log return
 }
 \description{
-this function requires
+Calculate Daily Return, Log close price and log return
 }

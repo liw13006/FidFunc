@@ -1,6 +1,6 @@
 
 
-#' this function requires
+#' Calculate Daily Return, Log close price and log return
 #'
 #' @param DataFrame a dataframe input that has the daily close price named: @param Closed.
 #' and a date column named: @param Date with format as: floating point and "xxxx(year)-xx(month)-xx(day)"
@@ -16,14 +16,15 @@ dailynlogReturn <- function(Date1,DataFrame){
     dplyr::filter(Date <= as.Date("2018-12-31"))
 }
 
-#' This function takes a dataframe:
+#' This function calculate projection value:
 #' @param DF with @param Date and @param Closed price and returns a @return projection value of the fund from the start date and assuming 10k investment from the start and reinvest all earnings
+#' @export
 getProjectionValue <- function(DF){
   P0 = dplyr::pull(dplyr::filter(DF, Date == dplyr::pull(dplyr::top_n(DF["Date"],-1)))%>%dplyr::select(Close))
   DF = dplyr::mutate(DF,ProjValper10k = (Close*10000)/P0)
 }
 
-#' take
+#' Calculate squared distance between two lines
 #' @param x a line
 #' @param y another line
 #' @return Calculate Euclidean distances between two sets of data

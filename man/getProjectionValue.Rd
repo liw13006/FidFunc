@@ -2,7 +2,7 @@
 % Please edit documentation in R/Fid_data_wrangler.R
 \name{getProjectionValue}
 \alias{getProjectionValue}
-\title{This function takes a dataframe:}
+\title{This function calculate projection value:}
 \usage{
 getProjectionValue(DF)
 }
@@ -10,5 +10,5 @@ getProjectionValue(DF)
 \item{DF}{with @param Date and @param Closed price and returns a @return projection value of the fund from the start date and assuming 10k investment from the start and reinvest all earnings}
 }
 \description{
-This function takes a dataframe:
+This function calculate projection value:
 }

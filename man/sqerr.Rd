@@ -2,7 +2,7 @@
 % Please edit documentation in R/Fid_data_wrangler.R
 \name{sqerr}
 \alias{sqerr}
-\title{take}
+\title{Calculate squared distance between two lines}
 \usage{
 sqerr(x, y)
 }
@@ -15,5 +15,5 @@ sqerr(x, y)
 Calculate Euclidean distances between two sets of data
 }
 \description{
-take
+Calculate squared distance between two lines
 }
