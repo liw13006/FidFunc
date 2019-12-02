@@ -13,12 +13,5 @@ md_std(md)
 adjusted standard error for each X in the original model
 }
 \description{
-the original sd estimation for a specific observation x should be
- sqrt(1+x `%*%` vcov(model) `%*%` x.T)  `*`   sigma_y
- However, this only allows for point wise multiplication. For our purpose,
- because we need to calculate for all the adjusted standard error for each predicted y
- the left X is transform into a diagnal matrix with ith entry is X_i,
- the vcov(model) is also transformed into a diagnal matrix such that ensure each X_i will
- independently times a single vcov(model).
- The right is just the feature matrix X with each row is one observation
+generate SD for each observed datapoint
 }
