@@ -49,11 +49,10 @@ plotmodel <- function(md,modelequation = md$call,linecolor = "#CE8891"){
 #' @return adjusted standard error for each X in the original model
 #' @export
 md_std <- function(md){
-  X_ <- md$model[,2]
-  left <- diag(x = X_ )
-  mid <- as.numeric(vcov(md))*diag(x = 1,nrow = length(X_))
+  X_ <- as.numeric(md$model[,2])
+  length_ <- length(X_)
   sig <- summary(md)$sigma
-  return(sqrt(1+left %*% mid %*% X_)*sig)
+  return((length_/md$df.residual)*sig)
 }
 
 
