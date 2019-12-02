@@ -21,7 +21,7 @@ plotmodel <- function(md,modelequation = md$call,linecolor = "#CE8891"){
     ylab("Standardized Residuals")+
     ggtitle(label = "Residual plot",subtitle = modelequation)
 
-  p2 <- ggplot(fit.benchmark)+
+  p2 <- ggplot(md)+
     aes(sample = .stdresid)+
     stat_qq(color = linecolor)+
     stat_qq_line(linetype = "dashed")+
